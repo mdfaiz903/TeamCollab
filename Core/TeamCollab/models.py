@@ -4,6 +4,9 @@ from django.contrib.auth.models import AbstractUser
 class User(AbstractUser):
     email = models.EmailField(unique=True)
 
+    def __str__(self):
+        return self.email
+
 
     
 class Project(models.Model):
@@ -12,11 +15,17 @@ class Project(models.Model):
     owner = models.ForeignKey(User,on_delete=models.CASCADE,related_name='projects')
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return self.name
+
 
 class ProjectMember(models.Model):
     project = models.ForeignKey(Project,on_delete=models.CASCADE,related_name='members')
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     role = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.project
 
 STATUS_CHOICE = [('to_do', 'To Do'), ('in_progress', 'In Progress'), ('done', 'Done')]
 PRIORITY_CHOICE = [('low', 'Low'), ('medium', 'Medium'), ('high', 'High')]
@@ -31,6 +40,9 @@ class Task(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     due_date = models.DateTimeField()
 
+    def __str__(self):
+        return self.title
+
 
 class Comment(models.Model):
     content = models.TextField()
@@ -38,4 +50,5 @@ class Comment(models.Model):
     task = models.ForeignKey(Task,on_delete=models.CASCADE,related_name='comments')
     created_at = models.DateTimeField(auto_now_add = True)
 
-
+    def __str__(self):
+        return self.task
